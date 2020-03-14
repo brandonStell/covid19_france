@@ -133,6 +133,10 @@ def save_cumulative_data(cum_df):
     cum_df.to_pickle('cumulative.pkl')
 
 
+def update_readme():
+
+
+
 sante_publique_table_elements, data_date_element = fetch_data_from_sante_publique_website()
 new_data = get_data_from_tr_elements(sante_publique_table_elements)
 new_data_date = get_date_from_sp_website_element(data_date_element)
@@ -142,10 +146,7 @@ cumulative_data = load_cumulative_date()
 cumulative_data = add_new_data_to_cumulative(new_data, cumulative_data)
 save_cumulative_data(cumulative_data)
 
-# idf = cumulative_data['Ile-de-France'].values
-# mu, std = norm.fit(idf)
-
-
+# gaussian starting guesses
 height = Parameter(5000)
 mu = Parameter(pd.Timestamp('2020-04-01').value)
 sigma = Parameter(pd.to_timedelta('10 days').value)
@@ -158,7 +159,10 @@ data_x = cumulative_data.date.astype('int').values
 predictions, dunno = fit(f, [mu, sigma, height], data, x=data_x)
 # print('Predicted peak:', pd.to_datetime(predictions[0]))
 # print('Max simultaneous infections:', format(predictions[2], '4.2e'))
-title = 'Predicted peak:' + str(pd.to_datetime(predictions[0])) + ', Max simultaneous infections:' + format(predictions[2], '4.2e')
+title = 'Predicted peak:' + \
+        str(pd.to_datetime(predictions[0])) + \
+        ', Max simultaneous infections:' + \
+        format(predictions[2], '4.2e')
 
 # fig, ax = plt.subplots()
 cumulative_data.plot(
@@ -171,13 +175,3 @@ cumulative_data.plot(
     figsize=(20, 15),
     grid=True
 ).get_figure().savefig('summary.png')
-# fig.autofmt_xdate()
-
-
-# start = pd.Timestamp('2020-02-01')
-# end = pd.Timestamp('2020-06-01')
-# t = np.linspace(start.value, end.value, 150)
-# p = norm.pdf(t, predictions[0], predictions[1])
-# t = pd.to_datetime(t)
-# plt.plot(t, p, 'k', linewidth=2)
-# cumulative_data.plot(x='date', y={'Ile-de-France', 'GrandEst', 'TotalMétropole'})
