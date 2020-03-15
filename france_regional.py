@@ -133,7 +133,7 @@ def save_cumulative_data(cum_df):
     cum_df.to_pickle('cumulative.pkl')
 
 
-def update_readme():
+# def update_readme():
 
 
 
