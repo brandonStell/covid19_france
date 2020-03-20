@@ -167,7 +167,7 @@ title = 'Predicted peak:' + \
 # fig, ax = plt.subplots()
 cumulative_data.plot(
     x='date',
-    y={'Ile-de-France', 'TotalMétropole'},
+    y={'GrandEst', 'Ile-de-France', 'TotalMétropole'},
     kind='bar',
     # ax=ax,
     rot=30,
