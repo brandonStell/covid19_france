@@ -147,9 +147,9 @@ cumulative_data = add_new_data_to_cumulative(new_data, cumulative_data)
 save_cumulative_data(cumulative_data)
 
 # gaussian starting guesses
-height = Parameter(5000)
-mu = Parameter(pd.Timestamp('2020-04-01').value)
-sigma = Parameter(pd.to_timedelta('10 days').value)
+height = Parameter(50000)
+mu = Parameter(pd.Timestamp('2020-05-01').value)
+sigma = Parameter(pd.to_timedelta('60 days').value)
 # data = cumulative_data['Ile-de-France'].values
 data = cumulative_data['TotalMétropole'].values
 data_x = cumulative_data.date.astype('int').values
@@ -175,3 +175,7 @@ cumulative_data.plot(
     figsize=(20, 15),
     grid=True
 ).get_figure().savefig('summary.png')
+
+test = pd.DataFrame(pd.date_range(start='1/1/2020', end='1/08/2020'), columns=['date'])
+test['fit'] = predictions[2] * np.exp(-((test.date.astype('int') - predictions[0])/predictions[1])**2)
+# height() * np.exp(-((x-mu())/sigma())**2)
