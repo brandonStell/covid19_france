@@ -164,18 +164,19 @@ title = 'Predicted peak:' + \
         ', Max simultaneous infections:' + \
         format(predictions[2], '4.2e')
 
-# fig, ax = plt.subplots()
+fig, ax = plt.subplots()
 cumulative_data.plot(
     x='date',
     y={'GrandEst', 'Ile-de-France', 'TotalMétropole'},
     kind='bar',
-    # ax=ax,
+    ax=ax,
     rot=30,
     title=title,
     figsize=(20, 15),
     grid=True
 ).get_figure().savefig('summary.png')
 
-test = pd.DataFrame(pd.date_range(start='1/1/2020', end='1/08/2020'), columns=['date'])
+test = pd.DataFrame(pd.date_range(start='1/1/2020', end='08/01/2020'), columns=['date'])
 test['fit'] = predictions[2] * np.exp(-((test.date.astype('int') - predictions[0])/predictions[1])**2)
+# test.fit.plot(x='date', ax=ax)
 # height() * np.exp(-((x-mu())/sigma())**2)
