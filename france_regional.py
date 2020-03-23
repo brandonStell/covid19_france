@@ -176,7 +176,25 @@ cumulative_data.plot(
     grid=True
 ).get_figure().savefig('summary.png')
 
-test = pd.DataFrame(pd.date_range(start='1/1/2020', end='08/01/2020'), columns=['date'])
+test = pd.DataFrame(pd.date_range(start='2/1/2020', end='05/01/2020'), columns=['date'])
 test['fit'] = predictions[2] * np.exp(-((test.date.astype('int') - predictions[0])/predictions[1])**2)
+fig2, ax2 = plt.subplots()
+test.set_index('date').fit.plot(x='date',
+                                ax=ax2,
+                                label='Gaussian Fit',
+                                legend=True,
+                                figsize=(20, 15)
+                                ).get_figure().savefig('fit.png')
+fig3, ax3 = plt.subplots()
+cumulative_data.set_index('date')['TotalMétropole'].diff().plot(ax=ax3,
+                                                                figsize=(20, 15),
+                                                                title='New Infections in France',
+                                                                label='France',
+                                                                legend=True
+                                                                )
+cumulative_data.set_index('date')['Ile-de-France'].diff().plot(ax=ax3,
+                                                               label='Paris',
+                                                               legend=True
+                                                               ).get_figure().savefig('new_infections.png')
 # test.fit.plot(x='date', ax=ax)
 # height() * np.exp(-((x-mu())/sigma())**2)
