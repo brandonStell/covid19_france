@@ -47,7 +47,8 @@ def fetch_data_from_sante_publique_website():
 
     tr_elements = doc.xpath('//tr')
     date_element = doc.xpath('//*[@id="block-236243"]/div[2]/div/h4')
-    return tr_elements, date_element
+    date_element2 = doc.xpath('/html/body/div[1]/div[1]/div/div/div/div[2]/div[1]/div/div[4]/div[1]/h4/span[1]')
+    return tr_elements, date_element2
 
 
 def get_data_from_tr_elements(tr_elements):
@@ -107,7 +108,7 @@ def get_date_from_sp_website_element(date_element):
     data_date = date_element[0].text_content()
     data_date = data_date.replace('Nombre de cas rapportés par région au ', '')
     data_date = data_date.split('h ', 1)[0]
-    data_date_object = datetime.strptime(data_date, '%d/%m/%Y à %H')
+    data_date_object = datetime.strptime(data_date, '%d/%m/%Y à %Hh')  # might need to remove h
     return data_date_object
 
 
@@ -171,19 +172,20 @@ cumulative_data.plot(
     kind='bar',
     ax=ax,
     rot=30,
-    title=title,
+    # title=title,
     figsize=(20, 15),
     grid=True
 ).get_figure().savefig('summary.png')
 
-test = pd.DataFrame(pd.date_range(start='2/1/2020', end='05/01/2020'), columns=['date'])
+test = pd.DataFrame(pd.date_range(start='2/1/2020', end='06/01/2020'), columns=['date'])
 test['fit'] = predictions[2] * np.exp(-((test.date.astype('int') - predictions[0])/predictions[1])**2)
 fig2, ax2 = plt.subplots()
 test.set_index('date').fit.plot(x='date',
                                 ax=ax2,
                                 label='Gaussian Fit',
                                 legend=True,
-                                figsize=(20, 15)
+                                figsize=(20, 15),
+                                title=title
                                 ).get_figure().savefig('fit.png')
 fig3, ax3 = plt.subplots()
 cumulative_data.set_index('date')['TotalMétropole'].diff().plot(ax=ax3,
