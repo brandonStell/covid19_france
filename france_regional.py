@@ -4,36 +4,36 @@ import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.optimize import curve_fit
 # from pandas.plotting import register_matplotlib_converters
-from scipy import optimize
 import matplotlib.dates as mdates
 from scipy.stats import norm
 
 # register_matplotlib_converters()
 
 
-class Parameter:
-    def __init__(self, value):
-            self.value = value
-
-    def set(self, value):
-            self.value = value
-
-    def __call__(self):
-            return self.value
-
-
-def fit(function, parameters, y, x = None):
-    def f(params):
-        i = 0
-        for p in parameters:
-            p.set(params[i])
-            i += 1
-        return y - function(x)
-
-    if x is None: x = np.arange(y.shape[0])
-    p = [param() for param in parameters]
-    return optimize.leastsq(f, p)
+# class Parameter:
+#     def __init__(self, value):
+#             self.value = value
+#
+#     def set(self, value):
+#             self.value = value
+#
+#     def __call__(self):
+#             return self.value
+#
+#
+# def fit(function, parameters, y, x=None):
+#     def f(params):
+#         i = 0
+#         for p in parameters:
+#             p.set(params[i])
+#             i += 1
+#         return y - function(x)
+#
+#     if x is None: x = np.arange(y.shape[0])
+#     p = [param() for param in parameters]
+#     return optimize.leastsq(f, p)
 
 
 # define your function:
@@ -48,7 +48,7 @@ def fetch_data_from_sante_publique_website():
     tr_elements = doc.xpath('//tr')
     date_element = doc.xpath('//*[@id="block-236243"]/div[2]/div/h4')
     date_element2 = doc.xpath('/html/body/div[1]/div[1]/div/div/div/div[2]/div[1]/div/div[4]/div[1]/h4/span[1]')
-    return tr_elements, date_element2
+    return tr_elements, date_element
 
 
 def get_data_from_tr_elements(tr_elements):
@@ -152,30 +152,31 @@ height = Parameter(50000)
 mu = Parameter(pd.Timestamp('2020-05-01').value)
 sigma = Parameter(pd.to_timedelta('60 days').value)
 # data = cumulative_data['Ile-de-France'].values
-data = cumulative_data['TotalMétropole'].values
+data = cumulative_data['TotalMétropole'].diff().values
 data_x = cumulative_data.date.astype('int').values
-
-
 # fit! (given that data is an array with the data to fit)
-predictions, dunno = fit(f, [mu, sigma, height], data, x=data_x)
+popt, pcov = curve_fit(f, data_x, data)
+# predictions, dunno = fit(f, [mu, sigma, height], data, x=data_x)
 # print('Predicted peak:', pd.to_datetime(predictions[0]))
 # print('Max simultaneous infections:', format(predictions[2], '4.2e'))
 title = 'Predicted peak:' + \
         str(pd.to_datetime(predictions[0])) + \
-        ', Max simultaneous infections:' + \
+        ', Max infections / day:' + \
         format(predictions[2], '4.2e')
 
 fig, ax = plt.subplots()
-cumulative_data.plot(
-    x='date',
+cumulative_data.set_index('date').plot(
+    # x='date',
     y={'GrandEst', 'Ile-de-France', 'TotalMétropole'},
     kind='bar',
     ax=ax,
     rot=30,
     # title=title,
     figsize=(20, 15),
-    grid=True
-).get_figure().savefig('summary.png')
+    # subplots=True,
+    # x_compact=True,
+    grid=True)\
+    .get_figure().savefig('summary.png')
 
 test = pd.DataFrame(pd.date_range(start='2/1/2020', end='06/01/2020'), columns=['date'])
 test['fit'] = predictions[2] * np.exp(-((test.date.astype('int') - predictions[0])/predictions[1])**2)
@@ -192,11 +193,17 @@ cumulative_data.set_index('date')['TotalMétropole'].diff().plot(ax=ax3,
                                                                 figsize=(20, 15),
                                                                 title='New Infections in France',
                                                                 label='France',
+                                                                # kind='bar',
+                                                                # secondary_y='TotalMétropole',
+                                                                grid=True,
                                                                 legend=True
                                                                 )
 cumulative_data.set_index('date')['Ile-de-France'].diff().plot(ax=ax3,
                                                                label='Paris',
-                                                               legend=True
+                                                               legend=True,
+                                                               grid=True,
+                                                               # kind='bar',
+                                                               # secondary_y='TotalMétropole',
                                                                ).get_figure().savefig('new_infections.png')
 # test.fit.plot(x='date', ax=ax)
 # height() * np.exp(-((x-mu())/sigma())**2)
