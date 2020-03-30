@@ -24,16 +24,20 @@ def fetch_data_from_data_dot_gouv_website():
 
     max_saved_date = saved_data.date_de_passage.astype('datetime64').max()
     data_url = 'https://www.data.gouv.fr/fr/datasets/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/'
-    if (max_saved_date + pd.Timedelta('2 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
-        page = requests.get(data_url)
-        # Store the contents of the website under doc
-        doc = lh.fromstring(page.content)
-        csv_link_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/footer/div[2]/a[2]')
-        csv_link = csv_link_element[0].attrib['href']
+    page = requests.get(data_url)
+    # Store the contents of the website under doc
+    doc = lh.fromstring(page.content)
+    filename_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/div/h4')
+    filename = filename_element[0].text.split('-')
+    current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
+    csv_link_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/footer/div[2]/a[2]')
+    csv_link = csv_link_element[0].attrib['href']
+    if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
         with requests.Session() as s:
             download = s.get(csv_link)
         decoded_content = download.content.decode('utf-8')
         df = pd.read_csv(StringIO(decoded_content))
+        print(csv_link)
         df.to_pickle('raw_hospitalizations.pkl')
     else:
         print("didn't download anything")
@@ -70,6 +74,10 @@ covid['Bordeaux'] = raw.where(raw.sursaud_cl_age_corona == '0')\
 covid['Strasbourg'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == '67')\
     .nbre_hospit_corona.dropna()
+covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+    .where(raw.dep == '69')\
+    .nbre_hospit_corona.dropna()
+
 covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
 covid = covid.reindex(pd.date_range('2-24-2020', '5-1-2020'))
 
@@ -78,12 +86,13 @@ covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
 covid['Marseilles_fit'] = gaussian_fit_data(covid.Marseilles)
 covid['Strasbourg_fit'] = gaussian_fit_data(covid.Strasbourg)
 covid['Bordeaux_fit'] = gaussian_fit_data(covid.Bordeaux)
+covid['Lyon_fit'] = gaussian_fit_data(covid.Lyon)
 covid['France_fit'] = gaussian_fit_data(covid.France)
 
-title = "Hospitalizations per day in France"
+title = "COVID-19 hospitalizations per day"
 fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux'], ax=ax1, title=title, grid=True, figsize=(20, 15))
-covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit'], ax=ax1)
+covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], ax=ax1, title=title, grid=True, figsize=(20, 15))
+covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1)
 covid.plot(style='k--', y=['France_fit', ], secondary_y=True, ax=ax1)
 covid.plot(y="France", secondary_y=True, ax=ax1, lw=4, grid=True).get_figure().savefig('hospitalizations.png')
 # covid.plot(y=["Paris_fit"], style='.', ax=ax1)
