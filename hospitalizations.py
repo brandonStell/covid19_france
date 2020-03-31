@@ -97,8 +97,9 @@ covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], ax=ax1, 
 covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], ax=ax1, style='o', ms=10)
 covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1)
 covid.plot(style='k--', y=['France_fit', ], secondary_y=True, ax=ax1)
-covid.plot(y="France", secondary_y=True, ax=ax1, lw=4, grid=True).get_figure().savefig('hospitalizations.png')
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+covid.plot(y="France", secondary_y=True, ax=ax1, lw=4, grid=True).get_figure().savefig('hospitalizations.png')
+
 # covid.plot(y=["Paris_fit"], style='.', ax=ax1)
 
 # raw.where(raw.sursaud_cl_age_corona == '0')\
