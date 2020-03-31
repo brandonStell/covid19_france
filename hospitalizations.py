@@ -81,6 +81,8 @@ covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
 covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
 covid = covid.reindex(pd.date_range('2-24-2020', '5-1-2020'))
 
+lockdown_start = pd.to_datetime('3-16-2020')
+lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 
 covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
 covid['Marseilles_fit'] = gaussian_fit_data(covid.Marseilles)
@@ -92,9 +94,11 @@ covid['France_fit'] = gaussian_fit_data(covid.France)
 title = "COVID-19 hospitalizations per day"
 fig1, ax1 = plt.subplots()
 covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], ax=ax1, title=title, grid=True, figsize=(20, 15))
+covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], ax=ax1, style='o', ms=10)
 covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1)
 covid.plot(style='k--', y=['France_fit', ], secondary_y=True, ax=ax1)
 covid.plot(y="France", secondary_y=True, ax=ax1, lw=4, grid=True).get_figure().savefig('hospitalizations.png')
+ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
 # covid.plot(y=["Paris_fit"], style='.', ax=ax1)
 
 # raw.where(raw.sursaud_cl_age_corona == '0')\
