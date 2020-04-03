@@ -4,9 +4,3 @@ Scraping covid 19 epidemiology data from:
 
 ![](hospitalizations.png)
 
-![alt text](summary.png)
-
-![alt text](fit.png)
-
-![alt text](new_infections.png)
-
