@@ -58,18 +58,18 @@ covid = pd.DataFrame()
 covid['Paris_reanimation'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '75')\
     .rea.dropna()
-covid['Paris_deaths'] = raw.where(raw.sexe == 0)\
+covid['Marseilles_reanimation'] = raw.where(raw.sexe == 0)\
+    .where(raw.dep == '13')\
+    .rea.dropna()
+covid['Paris_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '75')\
-    .dc.dropna()
-covid['Bordeaux'] = raw.where(raw.sexe == 0)\
-    .where(raw.dep == '33')\
-    .rad.dropna().diff()
-covid['Strasbourg'] = raw.where(raw.sexe == 0)\
-    .where(raw.dep == '67')\
-    .rad.dropna().diff()
-covid['Lyon'] = raw.where(raw.sexe == 0)\
-    .where(raw.dep == '69')\
-    .rad.dropna().diff()
+    .hosp.dropna()
+covid['Marseilles_hospital'] = raw.where(raw.sexe == 0)\
+    .where(raw.dep == '13')\
+    .hosp.dropna()
+# covid['Lyon'] = raw.where(raw.sexe == 0)\
+#     .where(raw.dep == '69')\
+#     .rad.dropna().diff()
 
 covid['France'] = raw.where(raw.sexe == 0).dropna().hosp.resample('D').sum().diff()
 covid = covid.reindex(pd.date_range('2-24-2020', '5-1-2020'))
@@ -84,14 +84,16 @@ lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 # covid['Lyon_fit'] = gaussian_fit_data(covid.Lyon)
 # covid['France_fit'] = gaussian_fit_data(covid.France)
 
-title = "COVID-19 hospitalizations per day"
+title = "Currently in Hospital"
 fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris_reanimation', 'Paris_deaths', 'Strasbourg', 'Bordeaux', 'Lyon'], legend=False, ax=ax1, title=title, grid=True, figsize=(20, 15))
-# covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], legend=True, ax=ax1, style='o', ms=10)
+covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
+ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+covid.plot(y=['Paris_hospital', 'Marseilles_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5).\
+    get_figure().savefig('hospitalizations.png')
 # covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1, legend=False).\
 #     get_figure().savefig('hospitalizations.png')
 # covid.plot(style='k--', y=['France_fit', ], secondary_y=True, ax=ax1, legend=False)
-ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.5)
+
 # covid.plot(y="France", legend=True, secondary_y=True, ax=ax1, lw=4, grid=True, style='r').get_figure().savefig('hospitalizations.png')
 
 # covid.plot(y=["Paris_fit"], style='.', ax=ax1)
