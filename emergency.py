@@ -16,32 +16,24 @@ def gauss_func(x, height, mu, sigma): return height * np.exp(-((x-mu)**2/(2*sigm
 def line_func(x, m, b): return (m * x) + b
 
 
-def fetch_data_from_data_dot_gouv_website():
-    try:
-        saved_data = pd.read_pickle('raw_hospitalizations.pkl')
-    except FileNotFoundError:
-        saved_data = pd.DataFrame(index=[pd.to_datetime('9999-01-01')])
+def fetch_data_from_data_dot_gouv_website(data_url):
 
-    max_saved_date = saved_data.date_de_passage.astype('datetime64').max()
-    data_url = 'https://www.data.gouv.fr/fr/datasets/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/'
     page = requests.get(data_url)
     # Store the contents of the website under doc
     doc = lh.fromstring(page.content)
     filename_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/div/h4')
     filename = filename_element[0].text.split('-')
-    current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
+    # current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
     csv_link_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/footer/div[2]/a[2]')
     csv_link = csv_link_element[0].attrib['href']
-    if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
-        with requests.Session() as s:
-            download = s.get(csv_link)
-        decoded_content = download.content.decode('utf-8')
-        df = pd.read_csv(StringIO(decoded_content))
-        print(csv_link)
-        df.to_pickle('raw_hospitalizations.pkl')
-    else:
-        print("didn't download anything")
-        df = saved_data
+    # if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
+    with requests.Session() as s:
+        download = s.get(csv_link)
+    decoded_content = download.content.decode('utf-8')
+    df = pd.read_csv(StringIO(decoded_content), sep=',')
+    print(csv_link)
+    df.to_pickle('raw_hospitalizations.pkl')
+
     return df
 
 
@@ -56,8 +48,9 @@ def gaussian_fit_data(s):
     )
     return popt[0] * np.exp(-((s.index.astype('int') - popt[1]) ** 2 / (2 * popt[2] ** 2)))
 
-
-raw = fetch_data_from_data_dot_gouv_website()
+data_url = 'https://www.data.gouv.fr/fr/datasets/donnees-des-urgences-hospitalieres-et-de-sos-medecins-relatives-a-lepidemie-de-covid-19/'
+# data_url = 'https://www.data.gouv.fr/fr/datasets/donnees-hospitalieres-relatives-a-lepidemie-de-covid-19/'
+raw = fetch_data_from_data_dot_gouv_website(data_url)
 raw.date_de_passage = raw.date_de_passage.astype('datetime64')
 raw.set_index('date_de_passage', inplace=True)
 
