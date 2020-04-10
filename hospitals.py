@@ -61,11 +61,17 @@ covid['Paris_reanimation'] = raw.where(raw.sexe == 0)\
 covid['Marseilles_reanimation'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '13')\
     .rea.dropna()
+covid['Lyon_reanimation'] = raw.where(raw.sexe == 0)\
+    .where(raw.dep == '69')\
+    .rea.dropna()
 covid['Paris_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '75')\
     .hosp.dropna()
 covid['Marseilles_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '13')\
+    .hosp.dropna()
+covid['Lyon_hospital'] = raw.where(raw.sexe == 0)\
+    .where(raw.dep == '69')\
     .hosp.dropna()
 # covid['Lyon'] = raw.where(raw.sexe == 0)\
 #     .where(raw.dep == '69')\
@@ -77,18 +83,12 @@ covid = covid.reindex(pd.date_range('2-24-2020', '5-1-2020'))
 lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 
-# covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
-# covid['Marseilles_fit'] = gaussian_fit_data(covid.Marseilles)
-# covid['Strasbourg_fit'] = gaussian_fit_data(covid.Strasbourg)
-# covid['Bordeaux_fit'] = gaussian_fit_data(covid.Bordeaux)
-# covid['Lyon_fit'] = gaussian_fit_data(covid.Lyon)
-# covid['France_fit'] = gaussian_fit_data(covid.France)
 
 title = "Currently in Hospital"
 fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
+covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
-covid.plot(y=['Paris_hospital', 'Marseilles_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5).\
+covid.plot(y=['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5).\
     get_figure().savefig('hospitalizations.png')
 # covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1, legend=False).\
 #     get_figure().savefig('hospitalizations.png')
