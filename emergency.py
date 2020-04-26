@@ -88,13 +88,13 @@ covid['France_fit'] = gaussian_fit_data(covid.France)
 title = "COVID-19 hospital admissions per day"
 fig1, ax1 = plt.subplots()
 covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'],
-           legend=False,
+           legend=True,
            ax=ax1,
            title=title,
            grid=True,
            figsize=(20, 15)).get_figure().savefig('emergency_admissions.png')
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
-covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], legend=True, ax=ax1, style='o', ms=10)
+# covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], legend=True, ax=ax1, style='o', ms=10)
 # covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1, legend=False).\
 #     get_figure().savefig('emergency_admissions.png')
 # covid.plot(style='k--', y=['France_fit', ], secondary_y=True, ax=ax1, legend=False)
