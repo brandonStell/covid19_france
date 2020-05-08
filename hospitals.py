@@ -78,7 +78,7 @@ covid['Lyon_hospital'] = raw.where(raw.sexe == 0)\
 #     .rad.dropna().diff()
 
 covid['France'] = raw.where(raw.sexe == 0).dropna().hosp.resample('D').sum().diff()
-covid = covid.reindex(pd.date_range('2-24-2020', '5-1-2020'))
+covid = covid.reindex(pd.date_range('2-24-2020', '6-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime('5-11-2020')

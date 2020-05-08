@@ -72,7 +72,7 @@ covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .nbre_hospit_corona.dropna()
 
 covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
-covid = covid.reindex(pd.date_range('2-24-2020', '5-1-2020'))
+covid = covid.reindex(pd.date_range('2-24-2020', '6-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime('5-11-2020')
