@@ -81,7 +81,7 @@ covid['France'] = raw.where(raw.sexe == 0).dropna().hosp.resample('D').sum().dif
 covid = covid.reindex(pd.date_range('2-24-2020', '6-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
-lockdown_end = pd.to_datetime('5-11-2020')
+lockdown_end = pd.to_datetime('5-10-2020')
 # lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 
 

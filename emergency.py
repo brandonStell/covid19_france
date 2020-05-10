@@ -75,7 +75,7 @@ covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hosp
 covid = covid.reindex(pd.date_range('2-24-2020', '6-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
-lockdown_end = pd.to_datetime('5-11-2020')
+lockdown_end = pd.to_datetime('5-10-2020')
 # lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 
 covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
