@@ -72,7 +72,7 @@ covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .nbre_hospit_corona.dropna()
 
 covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
-covid = covid.reindex(pd.date_range('2-24-2020', '6-1-2020'))
+covid = covid.reindex(pd.date_range('2-24-2020', '8-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime('5-10-2020')
@@ -92,8 +92,9 @@ covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'],
            ax=ax1,
            title=title,
            grid=True,
-           figsize=(20, 15)).get_figure().savefig('emergency_admissions.png')
+           figsize=(20, 15))
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+fig1.savefig('emergency_admissions.png')
 # covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], legend=True, ax=ax1, style='o', ms=10)
 # covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1, legend=False).\
 #     get_figure().savefig('emergency_admissions.png')
