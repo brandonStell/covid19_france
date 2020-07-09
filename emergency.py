@@ -30,7 +30,7 @@ def fetch_data_from_data_dot_gouv_website(data_url):
     with requests.Session() as s:
         download = s.get(csv_link)
     decoded_content = download.content.decode('utf-8')
-    df = pd.read_csv(StringIO(decoded_content), sep=',')
+    df = pd.read_csv(StringIO(decoded_content), sep=';')
     print(csv_link)
     df.to_pickle('raw_hospitalizations.pkl')
 
@@ -56,7 +56,7 @@ raw.set_index('date_de_passage', inplace=True)
 
 covid = pd.DataFrame()
 covid['Paris'] = raw.where(raw.sursaud_cl_age_corona == '0')\
-    .where(raw.dep == '75')\
+    .where(raw.dep == 75)\
     .nbre_hospit_corona.dropna()
 covid['Marseilles'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == '13')\
@@ -65,25 +65,25 @@ covid['Bordeaux'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == '33')\
     .nbre_hospit_corona.dropna()
 covid['Strasbourg'] = raw.where(raw.sursaud_cl_age_corona == '0')\
-    .where(raw.dep == '67')\
+    .where(raw.dep == 67)\
     .nbre_hospit_corona.dropna()
 covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
-    .where(raw.dep == '69')\
+    .where(raw.dep == 69)\
     .nbre_hospit_corona.dropna()
 
 covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
-covid = covid.reindex(pd.date_range('2-24-2020', '8-1-2020'))
+# covid = covid.reindex(pd.date_range('2-24-2020', '7-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime('5-10-2020')
 # lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 
-covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
-covid['Marseilles_fit'] = gaussian_fit_data(covid.Marseilles)
-covid['Strasbourg_fit'] = gaussian_fit_data(covid.Strasbourg)
-covid['Bordeaux_fit'] = gaussian_fit_data(covid.Bordeaux)
-covid['Lyon_fit'] = gaussian_fit_data(covid.Lyon)
-covid['France_fit'] = gaussian_fit_data(covid.France)
+# covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
+# covid['Marseilles_fit'] = gaussian_fit_data(covid.Marseilles)
+# covid['Strasbourg_fit'] = gaussian_fit_data(covid.Strasbourg)
+# covid['Bordeaux_fit'] = gaussian_fit_data(covid.Bordeaux)
+# covid['Lyon_fit'] = gaussian_fit_data(covid.Lyon)
+# covid['France_fit'] = gaussian_fit_data(covid.France)
 
 title = "COVID-19 hospital admissions per day"
 fig1, ax1 = plt.subplots()
