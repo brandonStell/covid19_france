@@ -64,6 +64,9 @@ covid['Marseilles_reanimation'] = raw.where(raw.sexe == 0)\
 covid['Lyon_reanimation'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '69')\
     .rea.dropna()
+covid['Savoie_reanimation'] = raw.where(raw.sexe == 0)\
+    .where(raw.dep == '74')\
+    .rea.dropna()
 covid['Paris_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '75')\
     .hosp.dropna()
@@ -72,6 +75,9 @@ covid['Marseilles_hospital'] = raw.where(raw.sexe == 0)\
     .hosp.dropna()
 covid['Lyon_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '69')\
+    .hosp.dropna()
+covid['Savoie_hospital'] = raw.where(raw.sexe == 0)\
+    .where(raw.dep == '74')\
     .hosp.dropna()
 # covid['Lyon'] = raw.where(raw.sexe == 0)\
 #     .where(raw.dep == '69')\
@@ -88,9 +94,9 @@ lockdown_end = pd.to_datetime('5-10-2020')
 
 title = "Currently in Hospital"
 fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
+covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation', 'Savoie_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
-covid.plot(y=['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5)#.\
+covid.plot(y=['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital', 'Savoie_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5)#.\
     # get_figure().savefig('hospitalizations.png')
 fig1.savefig('hospitalizations.png')
 

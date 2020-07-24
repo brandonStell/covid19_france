@@ -70,6 +70,9 @@ covid['Strasbourg'] = raw.where(raw.sursaud_cl_age_corona == '0')\
 covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == 69)\
     .nbre_hospit_corona.dropna()
+covid['HauteSavoie'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+    .where(raw.dep == 74)\
+    .nbre_hospit_corona.dropna()
 
 covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
 # covid = covid.reindex(pd.date_range('2-24-2020', '7-1-2020'))
@@ -87,7 +90,7 @@ lockdown_end = pd.to_datetime('5-10-2020')
 
 title = "COVID-19 hospital admissions per day"
 fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'],
+covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon', 'HauteSavoie'],
            legend=True,
            ax=ax1,
            title=title,
