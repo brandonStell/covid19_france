@@ -59,7 +59,7 @@ covid['Paris'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == 75)\
     .nbre_hospit_corona.dropna()
 covid['Marseilles'] = raw.where(raw.sursaud_cl_age_corona == '0')\
-    .where(raw.dep == '13')\
+    .where(raw.dep == 13)\
     .nbre_hospit_corona.dropna()
 covid['Bordeaux'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == '33')\
