@@ -80,13 +80,9 @@ covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hosp
 lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime('5-10-2020')
 # lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
+lockdown2_start = pd.to_datetime('10-30-2020')
+lockdown2_end = pd.to_datetime('12-1-2020')
 
-# covid['Paris_fit'] = gaussian_fit_data(covid.Paris)
-# covid['Marseilles_fit'] = gaussian_fit_data(covid.Marseilles)
-# covid['Strasbourg_fit'] = gaussian_fit_data(covid.Strasbourg)
-# covid['Bordeaux_fit'] = gaussian_fit_data(covid.Bordeaux)
-# covid['Lyon_fit'] = gaussian_fit_data(covid.Lyon)
-# covid['France_fit'] = gaussian_fit_data(covid.France)
 
 title = "COVID-19 hospital admissions per day"
 fig1, ax1 = plt.subplots()
@@ -97,34 +93,6 @@ covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon', 'HauteSav
            grid=True,
            figsize=(20, 15))
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
 fig1.savefig('emergency_admissions.png')
-# covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon'], legend=True, ax=ax1, style='o', ms=10)
-# covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1, legend=False).\
-#     get_figure().savefig('emergency_admissions.png')
-# covid.plot(style='k--', y=['France_fit', ], secondary_y=True, ax=ax1, legend=False)
-
-# covid.plot(y="France", legend=True, secondary_y=True, ax=ax1, lw=4, grid=True, style='r').get_figure().savefig('hospitalizations.png')
-
-# covid.plot(y=["Paris_fit"], style='.', ax=ax1)
-
-# raw.where(raw.sursaud_cl_age_corona == '0')\
-#     .where(raw.dep == '75')\
-#     .nbre_hospit_corona.dropna()\
-#     .cumsum()\
-#     .plot(
-#     label='Paris',
-#     # kind='bar',
-#     legend=True,
-#     figsize=(20, 15),
-#     title='Hospitalizations per day'
-#     )
-#
-# raw.where(raw.sursaud_cl_age_corona == '0')\
-#     .where(raw.dep == '13')\
-#     .nbre_hospit_corona.dropna()\
-#     .plot(
-#     label='Marseilles',
-#     secondary_y=True,
-#     legend=True
-#     ).get_figure().savefig('hospitalizations.png')
 

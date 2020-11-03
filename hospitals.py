@@ -91,11 +91,15 @@ lockdown_start = pd.to_datetime('3-16-2020')
 lockdown_end = pd.to_datetime('5-10-2020')
 # lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 
+lockdown2_start = pd.to_datetime('10-30-2020')
+lockdown2_end = pd.to_datetime('12-1-2020')
+
 
 title = "Currently in Hospital"
 fig1, ax1 = plt.subplots()
 covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation', 'Savoie_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
 ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
 covid.plot(y=['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital', 'Savoie_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5)#.\
     # get_figure().savefig('hospitalizations.png')
 fig1.savefig('hospitalizations.png')
