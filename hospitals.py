@@ -30,7 +30,7 @@ def fetch_data_from_data_dot_gouv_website(data_url):
     # if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
     with requests.Session() as s:
         download = s.get(csv_link)
-    decoded_content = download.content.decode("ISO-8859-1")
+    decoded_content = download.content.decode("utf-8")
     df = pd.read_csv(StringIO(decoded_content), sep=';')
     print(csv_link)
     df.to_pickle('raw_hospitalizations.pkl')
