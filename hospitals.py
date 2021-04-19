@@ -95,15 +95,24 @@ lockdown_end = pd.to_datetime('5-10-2020')
 lockdown2_start = pd.to_datetime('10-30-2020')
 lockdown2_end = pd.to_datetime('12-1-2020')
 
+lockdown3_start = pd.to_datetime('4-3-2021')
+lockdown3_end = pd.to_datetime('4-25-2021')
 
 title = "Currently in Hospital"
-fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation', 'Savoie_reanimation'], legend=True, ax=ax1, title=title, grid=True, figsize=(20, 15))
-ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
-ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
-covid.plot(y=['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital', 'Savoie_hospital'], secondary_y=True, legend=True, ax=ax1, lw=5)#.\
+reanimations = ['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation', 'Savoie_reanimation']
+hospitals = ['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital', 'Savoie_hospital']
+axes = covid.plot(y=reanimations, legend=True,
+           title=title, grid=True, figsize=(20, 15), subplots=True, sharex=True, sharey=True)
+hospital = 0
+for ax1 in axes:
+    ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+    ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
+    ax1.axvspan(lockdown3_start, lockdown3_end, facecolor='0.1', alpha=0.2)
+    covid.plot(y=hospitals[hospital], secondary_y=True, legend=True, ax=ax1, lw=5)#.\
+    hospital += 1
     # get_figure().savefig('hospitalizations.png')
-fig1.savefig('hospitalizations.png')
+plt.tight_layout
+plt.savefig('hospitalizations.png')
 
 
 # covid.plot(style='k--', y=['Paris_fit', 'Bordeaux_fit', 'Strasbourg_fit', 'Marseilles_fit', 'Lyon_fit'], ax=ax1, legend=False).\

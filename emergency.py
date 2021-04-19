@@ -82,17 +82,20 @@ lockdown_end = pd.to_datetime('5-10-2020')
 # lockdown_end = pd.to_datetime(datetime.today().strftime('%Y-%m-%d'))
 lockdown2_start = pd.to_datetime('10-30-2020')
 lockdown2_end = pd.to_datetime('12-1-2020')
-
+lockdown3_start = pd.to_datetime('4-3-2021')
+lockdown3_end = pd.to_datetime('4-25-2021')
 
 title = "COVID-19 hospital admissions per day"
-fig1, ax1 = plt.subplots()
-covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon', 'HauteSavoie'],
+# fig1, ax1 = plt.subplots()
+axes = covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon', 'HauteSavoie'],
            legend=True,
-           ax=ax1,
            title=title,
            grid=True,
-           figsize=(20, 15))
-ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
-ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
-fig1.savefig('emergency_admissions.png')
+           figsize=(20, 15), subplots=True, sharex=True, sharey=True)
+for ax1 in axes:
+    ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
+    ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
+    ax1.axvspan(lockdown3_start, lockdown3_end, facecolor='0.1', alpha=0.2)
+plt.tight_layout()
+plt.savefig('emergency_admissions.png')
 
