@@ -108,7 +108,7 @@ for ax1 in axes:
     ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
     ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
     ax1.axvspan(lockdown3_start, lockdown3_end, facecolor='0.1', alpha=0.2)
-    covid.plot(y=hospitals[hospital], secondary_y=True, legend=True, ax=ax1, lw=5)#.\
+    covid.plot(y=hospitals[hospital], secondary_y=True, legend=True, ax=ax1, lw=5, sharey=True)#.\
     hospital += 1
     # get_figure().savefig('hospitalizations.png')
 plt.tight_layout
