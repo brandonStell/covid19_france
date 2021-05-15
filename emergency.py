@@ -91,7 +91,7 @@ axes = covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon', 'H
            legend=True,
            title=title,
            grid=True,
-           figsize=(20, 15), subplots=True, sharex=True, sharey=True)
+           figsize=(20, 15), subplots=True, sharex=True, sharey=False)
 for ax1 in axes:
     ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
     ax1.axvspan(lockdown2_start, lockdown2_end, facecolor='0.1', alpha=0.2)
