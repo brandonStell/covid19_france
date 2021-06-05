@@ -102,7 +102,7 @@ title = "Currently in Hospital"
 reanimations = ['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation', 'Savoie_reanimation']
 hospitals = ['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital', 'Savoie_hospital']
 axes = covid.plot(y=reanimations, legend=True,
-           title=title, grid=True, figsize=(20, 15), subplots=True, sharex=True, sharey=True)
+           title=title, grid=True, figsize=(20, 15), subplots=True, sharex=True, sharey=False)
 hospital = 0
 for ax1 in axes:
     ax1.axvspan(lockdown_start, lockdown_end, facecolor='0.1', alpha=0.2)
