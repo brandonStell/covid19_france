@@ -21,11 +21,11 @@ def fetch_data_from_data_dot_gouv_website(data_url):
     page = requests.get(data_url)
     # Store the contents of the website under doc
     doc = lh.fromstring(page.content)
-    filename_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/div/h4')
+    filename_element = doc.xpath('/html/body/section/section[5]/div[2]/div[1]/article[2]/div/header/div[2]/h4')
     filename = filename_element[0].text.split('-')
     print(filename)
     # current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
-    csv_link_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[2]/footer/div[2]/a[2]')
+    csv_link_element = doc.xpath('/html/body/section/section[5]/div[2]/div[1]/article[2]/div/section/dl/div[2]/dd/a')
     csv_link = csv_link_element[0].attrib['href']
     # if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
     with requests.Session() as s:
@@ -59,7 +59,7 @@ covid = pd.DataFrame()
 covid['Paris_reanimation'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '75')\
     .rea.dropna()
-covid['Marseilles_reanimation'] = raw.where(raw.sexe == 0)\
+covid['Marseille_reanimation'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '13')\
     .rea.dropna()
 covid['Lyon_reanimation'] = raw.where(raw.sexe == 0)\
@@ -71,7 +71,7 @@ covid['Savoie_reanimation'] = raw.where(raw.sexe == 0)\
 covid['Paris_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '75')\
     .hosp.dropna()
-covid['Marseilles_hospital'] = raw.where(raw.sexe == 0)\
+covid['Marseille_hospital'] = raw.where(raw.sexe == 0)\
     .where(raw.dep == '13')\
     .hosp.dropna()
 covid['Lyon_hospital'] = raw.where(raw.sexe == 0)\
@@ -99,8 +99,8 @@ lockdown3_start = pd.to_datetime('4-3-2021')
 lockdown3_end = pd.to_datetime('4-25-2021')
 
 title = "Currently in Hospital"
-reanimations = ['Paris_reanimation', 'Marseilles_reanimation', 'Lyon_reanimation', 'Savoie_reanimation']
-hospitals = ['Paris_hospital', 'Marseilles_hospital', 'Lyon_hospital', 'Savoie_hospital']
+reanimations = ['Paris_reanimation', 'Marseille_reanimation', 'Lyon_reanimation', 'Savoie_reanimation']
+hospitals = ['Paris_hospital', 'Marseille_hospital', 'Lyon_hospital', 'Savoie_hospital']
 axes = covid.plot(y=reanimations, legend=True,
            title=title, grid=True, figsize=(20, 15), subplots=True, sharex=True, sharey=False)
 hospital = 0

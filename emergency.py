@@ -22,9 +22,9 @@ def fetch_data_from_data_dot_gouv_website(data_url):
     # Store the contents of the website under doc
     doc = lh.fromstring(page.content)
     filename_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/div/h4')
-    filename = filename_element[0].text.split('-')
+    # filename = filename_element[0].text.split('-')
     # current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
-    csv_link_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/footer/div[2]/a[2]')
+    csv_link_element = doc.xpath('/html/body/section/section[5]/div[2]/div[1]/article[1]/div/section/dl/div[2]/dd/a')
     csv_link = csv_link_element[0].attrib['href']
     # if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
     with requests.Session() as s:
@@ -58,7 +58,7 @@ covid = pd.DataFrame()
 covid['Paris'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == 75)\
     .nbre_hospit_corona.dropna()
-covid['Marseilles'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Marseille'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == 13)\
     .nbre_hospit_corona.dropna()
 covid['Bordeaux'] = raw.where(raw.sursaud_cl_age_corona == '0')\
@@ -70,7 +70,7 @@ covid['Strasbourg'] = raw.where(raw.sursaud_cl_age_corona == '0')\
 covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == 69)\
     .nbre_hospit_corona.dropna()
-covid['HauteSavoie'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Haute Savoie'] = raw.where(raw.sursaud_cl_age_corona == '0')\
     .where(raw.dep == 74)\
     .nbre_hospit_corona.dropna()
 
@@ -87,7 +87,7 @@ lockdown3_end = pd.to_datetime('4-25-2021')
 
 title = "COVID-19 hospital admissions per day"
 # fig1, ax1 = plt.subplots()
-axes = covid.plot(y=['Paris', 'Marseilles', 'Strasbourg', 'Bordeaux', 'Lyon', 'HauteSavoie'],
+axes = covid.plot(y=['Paris', 'Marseille', 'Strasbourg', 'Bordeaux', 'Lyon', 'Haute Savoie'],
            legend=True,
            title=title,
            grid=True,
