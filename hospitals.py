@@ -21,11 +21,11 @@ def fetch_data_from_data_dot_gouv_website(data_url):
     page = requests.get(data_url)
     # Store the contents of the website under doc
     doc = lh.fromstring(page.content)
-    filename_element = doc.xpath('/html/body/section/main/section[4]/div[2]/div[1]/article[2]/div/header/div[2]/h4')
+    filename_element = doc.xpath('//*[@id="resource-63352e38-d353-4b54-bfd1-f1b3ee1cabd7-header"]/div[2]/h4')
     filename = filename_element[0].text.split('-')
     print(filename)
     # current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
-    csv_link_element = doc.xpath('/html/body/section/main/section[4]/div[2]/div[1]/article[3]/div/section/dl/div[2]/dd/a')
+    csv_link_element = doc.xpath('//*[@id="resource-63352e38-d353-4b54-bfd1-f1b3ee1cabd7"]/dl/div[1]/dd/a')
     csv_link = csv_link_element[0].attrib['href']
     # if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
     with requests.Session() as s:

@@ -21,10 +21,10 @@ def fetch_data_from_data_dot_gouv_website(data_url):
     page = requests.get(data_url)
     # Store the contents of the website under doc
     doc = lh.fromstring(page.content)
-    filename_element = doc.xpath('/html/body/section[3]/div/div/div/div[3]/article[1]/div/h4')
+    # filename_element = doc.xpath('//*[@id="resource-d2af5160-a21d-47b7-8f30-3c20dade63b1-header"]/div[2]/h4')
     # filename = filename_element[0].text.split('-')
-    # current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
-    csv_link_element = doc.xpath('/html/body/section/main/section[4]/div[2]/div[1]/article[1]/div/section/dl/div[2]/dd/a')
+    # # current_data_date = datetime.strptime("".join(filename[3:7]), '%Y%m%d%Hh%M')
+    csv_link_element = doc.xpath('//*[@id="resource-eceb9fb4-3ebc-4da3-828d-f5939712600a"]/dl/div[1]/dd/a')
     csv_link = csv_link_element[0].attrib['href']
     # if (max_saved_date + pd.Timedelta('0 days')) < pd.to_datetime(datetime.today().strftime('%Y-%m-%d')):
     with requests.Session() as s:
@@ -55,26 +55,26 @@ raw.date_de_passage = raw.date_de_passage.astype('datetime64')
 raw.set_index('date_de_passage', inplace=True)
 
 covid = pd.DataFrame()
-covid['Paris'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Paris'] = raw.where(raw.sursaud_cl_age_corona == 0)\
     .where(raw.dep == 75)\
     .nbre_hospit_corona.dropna()
-covid['Marseille'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Marseille'] = raw.where(raw.sursaud_cl_age_corona == 0)\
     .where(raw.dep == 13)\
     .nbre_hospit_corona.dropna()
-covid['Bordeaux'] = raw.where(raw.sursaud_cl_age_corona == '0')\
-    .where(raw.dep == '33')\
+covid['Bordeaux'] = raw.where(raw.sursaud_cl_age_corona == 0)\
+    .where(raw.dep == 33)\
     .nbre_hospit_corona.dropna()
-covid['Strasbourg'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Strasbourg'] = raw.where(raw.sursaud_cl_age_corona == 0)\
     .where(raw.dep == 67)\
     .nbre_hospit_corona.dropna()
-covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Lyon'] = raw.where(raw.sursaud_cl_age_corona == 0)\
     .where(raw.dep == 69)\
     .nbre_hospit_corona.dropna()
-covid['Haute Savoie'] = raw.where(raw.sursaud_cl_age_corona == '0')\
+covid['Haute Savoie'] = raw.where(raw.sursaud_cl_age_corona == 0)\
     .where(raw.dep == 74)\
     .nbre_hospit_corona.dropna()
 
-covid['France'] = raw.where(raw.sursaud_cl_age_corona == '0').dropna().nbre_hospit_corona.resample('D').sum()
+covid['France'] = raw.where(raw.sursaud_cl_age_corona == 0).dropna().nbre_hospit_corona.resample('D').sum()
 # covid = covid.reindex(pd.date_range('2-24-2020', '7-1-2020'))
 
 lockdown_start = pd.to_datetime('3-16-2020')
