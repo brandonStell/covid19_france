@@ -17,7 +17,6 @@ def line_func(x, m, b): return (m * x) + b
 
 
 def fetch_data_from_data_dot_gouv_website(data_url):
-
     page = requests.get(data_url)
     # Store the contents of the website under doc
     doc = lh.fromstring(page.content)
